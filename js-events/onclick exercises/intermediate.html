@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intermediate Activity - onclick </title>
+  <style>
+    * { margin: 0;padding: 0;box-sizing: border-box; }
+    body { height: 100vh;width: 100vw;display: flex;flex-direction: column;align-items: center;justify-content: center;position: relative; }
+    .wrapper { width: max-content;flex: .1;background-color: #ececec;display: flex;align-items: center;justify-content: center;border-radius: 5px;padding: 15px 35px; }
+    .wrapper > .thumbnails { display: flex;align-items: center;justify-content: space-between;gap: 20px; }
+    .thumbnails > .img-container { width: max-content;display: flex;align-items: center;gap: 5px;padding: 7px 15px;border-radius: 5px;background-color: #d41df8;cursor: pointer; &:hover { background-color: #de3aff; } }
+    .img-container > img { width: 20px;height: 20px; }
+    .img-container > p { font-family: 'Arial', serif;font-size: 15px;color: #fff; }
+    .preview { position: absolute;width: 100%;height: 100%;background-color: rgba(0, 0, 0, .7);display: none;align-items: center;justify-content: center;animation: entrance .4s ease-in-out; }
+    .preview > .modal { display: flex;flex-direction: column;align-items: center;gap: 15px;padding: 25px;background-color: #ababab;animation: popUp .2s ease-in-out; }
+    .modal > button { width: 100%;height: 35px;font-size: 18px;border-radius: 8px;border: none;cursor: pointer;background-color: #fff; &:hover { background-color: #e0e0e0; } }
+    @keyframes popUp { 0%{ transform: scale(0); } 100%{transform: scale(1);} }
+    @keyframes entrance { to{ opacity: 1; } }
+
+
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="thumbnails">
+      <div class="img-container" onclick="showPreview('images/asdasd.jpeg')">
+        <img src="images/asdasd.jpeg" alt="">
+        <p class="image_viewer">Show Preview</p>
+      </div>
+      <div class="img-container" onclick="showPreview('images/hell nah.jpeg')">
+        <img src="images/hell nah.jpeg" alt="">
+        <p class="image_viewer">Show Preview</p>
+      </div>
+      <div class="img-container" onclick="showPreview('images/speed.jpg')">
+        <img src="images/speed.jpg" alt="">
+        <p class="image_viewer">Show Preview</p>
+      </div>
+    </div>
+
+    <div class="preview">
+      <div class="modal">
+        <img src="images/asdasd.jpeg" alt="" id="image">
+        <button type="button" onclick="closePreview()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const image_element = document.getElementById('image');
+    const preview_modal = document.querySelector('.preview');
+
+    function showPreview(image_link) {
+      image_element.src = image_link;
+      preview_modal.style.display = "flex";
+    }
+
+    function closePreview() {
+      preview_modal.style.display = "none";
+    }
+  </script>
+</body>
+</html>

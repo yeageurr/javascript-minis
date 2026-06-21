@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JS Events</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', serif;}
+    body { background-color: #e1e1e1; width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+    .wrapper { background-color: #dddada; margin: 25px 0; gap: 35px; padding: 25px; border-radius: 10px; width: 50%; height: max-content; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+    .task { display: flex; flex-direction: column; width: 100%; align-items: center; gap: 10px; }
+    button { background-color: #8316ff; color: #fff; border: none; width: 80%; font-size: 18px; padding: 10px 10px;border-radius: 5px; cursor: pointer; &:hover {background-color: #a04cff;} }
+    .counter { width: 80%; background-color: #f7f7f7; ; padding: 15px;border-radius: 5px;} 
+  </style>
+
+</head>
+<body>
+  
+  <div class="wrapper">
+    
+    <div class="task">
+      <h1>onClick</h1>
+      <button type="button" onclick="updateCounter()">Click me</button>
+      <p class="counter" id="counter">Clicked 0 times.</p>
+    </div>
+    
+    <div class="task">
+      <h1>onClick 2</h1>
+      <button type="button" onclick="addToCart('Sneakers', 1299)">+ Sneakers ₱1299</button>
+      <button type="button" onclick="addToCart('Cap', 499)">+ Cap ₱499</button>
+      <p class="counter" id="total">Cart items: 0 - Total: ₱0</p> 
+    </div>
+
+    <div class="basic">
+
+    </div>
+
+    <div class="intermediate"></div>
+  </div>
+
+
+  <script>
+    const log = console.log;
+
+    // Example 1
+    let count = 0;
+    function updateCounter() {
+      count++;
+
+      document.getElementById('counter').textContent = `
+        Clicked ${count} times.
+      `;
+    }
+
+    // Example 2
+    const cart = [];
+    
+    function addToCart(name, price) {
+      let total = 0;
+      cart.push({ name, price });
+
+      for(let item of cart) {
+        total += item.price;
+      }
+
+      document.getElementById('total').textContent = `Cart items: ${cart.length} - Total: ₱${total}`;
+    }
+
+  </script>
+</body>
+</html>
