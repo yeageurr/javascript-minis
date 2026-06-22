@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Activity - onclick </title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <style>
+    :root { --imageDimes: 7.5em; --cartImage: 6em; }
+    * { margin: 0;padding: 0;box-sizing: border-box;font-family: 'Arial', serif; }
+    body { width: 100vw;height: 100vh;font-size: 16px;overflow: hidden; }
+    .wrapper { width: 100%;height: 100%;display: flex;align-items: center;justify-content: center;position: relative;background-color: rgba(62, 0, 113, 0.427); }
+    main { display: flex;flex-direction: column;align-items: center;flex: 1;height: 100%;box-sizing: border-box; }
+    main > .banner { width: 100%;height: 10%;display: flex;align-items: center;justify-content: space-between;font-family: 'Arial', serif;font-weight: 600;padding: 0 8em;color: #fff;  }
+    .banner > p { cursor: pointer;font-size: 1.5em; } .banner > i { font-size: 1.7em; }
+    .banner > i { cursor: pointer; &:hover { color: #000; } }
+    main > section { display: flex;width: 90%;height: 80%;background-color: #ebebeb;border-radius: 25px;flex-wrap: wrap;padding: 2em;gap: 3em; }
+    section > .card { height: max-content;overflow: hidden;display: flex;flex-direction: column;border: 2px solid rgba(0, 0, 0, .2);width: max-content;border-radius: .5em; }
+    .card > img { width: var(--imageDimes);height: var(--imageDimes);border-bottom: 1px solid rgba(0, 0, 0, .2); }
+    .card > .details { font-family: 'Arial', serif;background-color: #f8f8f8;padding: 0.3em; }
+    .details > .name { font-size: 1em;font-weight: 600;margin-bottom: 0.3em; }
+    .details > .price { font-size: .9em; }
+    .card > button { cursor: pointer;gap: 5px;border: none;background-color: #1aff00;padding: 8px;display: flex;align-items: center;justify-content: center; &:hover { background-color: #4cff39; } &:active { background-color: #3961ff; } }
+
+    .wrapper > aside { position: absolute;transform: translateX(100%);display: flex;box-shadow: .5em 0 1em #000;flex-direction: column;align-items: start;justify-content: flex-start; top: 0;right: 0;height: 100%;width: 20%;background-color: #fff;border: 1px solid rgba(0, 0, 0, .3);transition:.4s all ease-in-out ; }
+    aside > .head { display: flex;align-items: center;justify-content: flex-start;border-bottom: 1px solid rgba(0, 0, 0, .3);width: 100%;height: 6%;padding-left: 1em;gap: 1.2em; }
+    .head > p { font-size: 1.2em;font-family: 'Arial', serif; } .head > i { font-size: 1.3em;cursor: pointer; }
+    aside > .itemContainer { width: 100%;flex: 1;display: flex;flex-direction: column;gap: 0.3em; }
+    .itemContainer > .itemWrapper { border: 1px solid #000;display: flex;align-items: center;justify-content: flex-start;width: 100%;border-bottom: 1px solid rgba(0, 0, 0, .3);border-top: 1px solid rgba(0, 0, 0, .3);margin-top: 1em;cursor: pointer; &:hover button { width: 10%; } }
+    .itemWrapper > button { width: 0%;border: none;height: 100%;cursor: pointer;background-color: #ff2626;color: #fff;font-size: 1.2em;transition: .2s all ease-in-out; &:hover { background-color: #ff4242; } }
+    .itemWrapper > .itemDetails { height: 100%;flex: 1;display: flex;align-items: center; }
+    .itemDetails > img { width: var(--cartImage);height: var(--cartImage); }
+    .itemDetails > .texts { display: flex;flex-direction: column;height: 100%;align-items: flex-start;flex: 1;justify-content: flex-start;padding: .2em.5em;gap: 0.2em; }
+    .texts > .name { font-size: 2em;margin-bottom: .1em; }
+    .texts > div { display: flex;align-items: center;justify-content: space-between;width: 100%; }
+    .texts > div > p { font-size: .9em; }
+
+    aside > .priceCounter { display: flex;align-items: center;justify-content: space-between;width: 100%;height: 3em;border-top: 1px solid rgba(0, 0, 0, .3);padding: 1em; }
+    .priceCounter > p { opacity: .8; }
+
+
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <main>
+      <div class="banner">
+        <p class="products">Products</p>
+        <i class='bx bxs-cart' onclick="showCart()"></i>
+      </div>
+      <section class="productCards" id="cardHolder"></section>
+    </main>
+
+    <aside class="cartContainer">
+      <div class="head">
+        <i class='bx bxs-chevron-right' title="Close" onclick="showCart()"></i>
+        <p class="head">My Cart</p>
+      </div>
+      <div class="itemContainer"></div>
+      <div class="priceCounter"></div>
+    </aside>
+  </div>
+
+  <script>
+    const log = console.log;
+    const sideBar = document.querySelector('.cartContainer');
+    const itemWrapper = document.querySelector('.itemContainer');
+    const priceCounter = document.querySelector('.priceCounter');
+    let itemFragment = '';
+
+    const BASEDIR = "images/";
+    const cardHolder = document.getElementById('cardHolder');
+    let cartFlag = true;
+    let cart = [];
+    let html = '';
+    const products = [
+      {key: 1, name: "Baggy Pants", price: 450, imageLink: `${BASEDIR}baggy.jpeg`}, 
+      {key: 2, name: "Onitsuka", price: 1499, imageLink: `${BASEDIR}onitsuka_yellow.jpeg`},
+      {key: 3, name: "Speedcat", price: 1875, imageLink: `${BASEDIR}speedcat.jpeg`},
+      {key: 4, name: "Trouser Chains", price: 275, imageLink: `${BASEDIR}trouser chains.jpeg`},
+      {key: 5, name: "Stussy Cap", price: 1100, imageLink: `${BASEDIR}stussy cap.jpeg`}
+    ];
+
+    function deleteFromCart(name, key) {
+      let answer = confirm(`Do you want to delete ${name} from your cart?`);
+      
+      if(answer) {
+        cart = cart.filter(item => item.key !== key);
+        alert(`${name} deleted successfully!`);
+      }
+      showCartItems();
+    }
+    function showCartItems() {
+      let total = 0;
+      // key, name, price, url, quantity
+      for(let item of cart) {
+        itemFragment += 
+        `
+          <div class="itemWrapper">
+            <button type="button" onclick='deleteFromCart("${item.name}", ${item.key})'><i class='bx bx-trash' ></i></button>
+            <div class="itemDetails">
+              <img src="${item.url}" alt="">
+              <div class="texts">
+                <p class="name">${item.name}</p>
+                <div class="priceWrapper">
+                  <p class="label">Price:</p>
+                  <p class="price">₱${item.price}</p>
+                </div>
+                <div class="quantityWrapper">
+                  <p class="label">Total Quantity:</p>
+                  <p class="quantity">x ${item.quantity}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        total += (item.price * item.quantity);
+      }
+      priceCounter.innerHTML = `
+        <p>Total Price:</p>
+        <p>₱${total}.00</p>
+      `;
+      itemWrapper.innerHTML = itemFragment; 
+      itemFragment = '';
+    }
+    function showCart() {
+      itemFragment = '';
+      showCartItems();
+
+      if(cartFlag) {
+        sideBar.style.transform = "translateX(0)";
+        cartFlag = !cartFlag;
+      } else {
+        sideBar.style.transform = "translateX(100%)";
+        cartFlag = !cartFlag;
+      }
+    }
+    function addToCart(key, name, price, url) {
+      console.clear();
+      let quantity = 1;
+      let flag = false;
+
+      for(let item of cart) {
+        if(item.key == key) {
+          flag = true;
+        }
+      }
+
+      if(flag) {
+        for(let item of cart) { if(item.key == key) {item.quantity++} }
+      } else {
+        cart.push({key, name, price, url, quantity});
+      }
+      showCartItems();
+    }
+    for(let item of products) {
+      html += `
+      <div class="card" id="card">
+        <img src="${item.imageLink}" alt="" class="productImage">
+        <div class="details">
+          <p class="name">${item.name}</p>
+          <p class="price">₱${item.price}</p>
+        </div>
+        <button type="button" onclick="addToCart(${item.key}, '${item.name}', ${item.price}, '${item.imageLink}')">
+          <i class='bx bx-plus' ></i> Add to Cart
+        </button>
+      </div>
+      `
+    } cardHolder.innerHTML = html;
+
+  </script>
+</body>
+</html>
