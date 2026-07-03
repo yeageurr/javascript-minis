@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic IT Ticketing System — onchange activity</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+    * { margin: 0;padding: 0;box-sizing: border-box; }
+    body { width: 100vw;height: 100vh;font-family: 'Poppins', serif;font-size: 16px;box-sizing: border-box; }
+    .container { width: 100%;height: 100%;display: flex;flex-direction: column;align-items: center;justify-content: center; }
+    .container > .wrapper { border: 1px solid #000;padding: 2em;border-radius: 0.3em;background-color: #ebebeb;width: 25%;height: max-content;display: flex;flex-direction: column;align-items: center;justify-content: center; }
+    .wrapper > .head { margin: 1em .6em 2em .6em;display: flex;flex-direction: column;align-items: center;justify-content: center; }
+    .head > h2 { font-size: 2em;font-weight: 500;font-family: 'Roboto', serif;letter-spacing: 0.1em; }
+    .head > p { font-size: 0.8em; }
+    .wrapper > .inputs { width: 100%;display: flex;flex-direction: column;gap: 0.5em; }
+    .inputs > .dropdown { width: 100%;display: flex;align-items: center;gap: 0.4em; }
+    .dropdown > select { font-size: 1em;padding: 0.2em;border-radius: 0.2em;border: 1px solid rgba(0, 0, 0, .5);outline: none;background-color: #fff;flex: 1;font-family: 'Poppins', serif;max-width: 50%; }
+    .inputs > textarea { resize: none;font-family: 'Poppins', serif;padding: .5em .3em;outline: none;height: 7em; }
+    .hr { width: 100%;height: 0.05em;background-color: rgba(0, 0, 0, .5);margin: 1em; }
+    .wrapper > .summary { display: flex;flex-direction: column;align-items: start;width: 100%; }
+    .summary > h3 { font-weight: 450; }
+    .summary > .report { display: flex;flex-direction: column;width: 100%;gap: 0.2em;margin-top: 0.5em; }
+    .report > .summary-report { display: flex;align-items: flex-end;width: 100%; }
+    .summary-report > .label { width: 24%;font-size: 0.9em; }
+    .summary-report > .preview { flex: 1;border-bottom: 1px solid rgba(0, 0, 0, .5);font-size: 0.9em; overflow: hidden; }
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    <div class="wrapper">
+      <div class="head">
+        <h2 class="title">IT Ticketing System</h2>
+        <p class="name">Domasig, Anthony O. — BSIT 3B</p>
+      </div>
+      <div class="inputs">
+        <div class="dropdown">
+          <select name="" id="categ_main" onchange="changeSubs(this.value)">
+            <option value="">Select Option</option>
+            <option value="Hardware">Hardware</option>
+            <option value="Software">Software</option>
+            <option value="Network">Network</option>
+          </select>
+          <select name="" id="categ_options" onchange="setSub(this.value)"></select>
+        </div>
+        <textarea name="details" id="details" autocomplete="off" placeholder="Enter additional details..." oninput="setDetails(this.value.trim())"></textarea>
+      </div>
+      <div class="hr"></div>
+      <div class="summary">
+        <h3 class="label">Ticket Summary</h3>
+        <div class="report">
+          <div class="summary-report">
+            <p class="label" id="category_label">Category: </p>
+            <p class="preview" id="category_submitted"></p>
+          </div>
+          <div class="summary-report">
+            <p class="label" id="option_label">Option: </p>
+            <p class="preview" id="option_submitted"></p>
+          </div>
+          <div class="summary-report">
+            <p class="label" id="details_label">Details: </p>
+            <p class="preview" id="details_submitted"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const log = console.log;
+    let sub_div = '';
+    const category = document.getElementById('categ_main');
+    const subOptions = document.getElementById('categ_options'); 
+    const sym = {
+      "Hardware": ["RAM & SSD", "Power Issues", "Peripherals"],
+      "Software": ["OS Installation", "MS Office", "Application Management"],
+      "Network": ["Internet Connection", "Server", "Router Configuration"],
+    };
+
+    const categWrapper = document.getElementById('category_submitted');
+    const subWrapper = document.getElementById('option_submitted');
+    const detailsWrapper = document.getElementById('details_submitted');
+
+    function changeSubs(key) {
+      sub_div = '';
+
+      if(key.length > 0) {
+        const [op1, op2, op3] = sym[key];
+        for(item of sym[key]) {
+          sub_div += `
+            <option value="${item}">${item}</option>
+          `;
+        }
+      } else {
+        sub_div += `<option value="">Select Category</option>`;
+      }
+
+      categWrapper.textContent = key;
+      subOptions.innerHTML = sub_div;
+    }
+    
+    function setSub(val) { subWrapper.textContent = val; }
+
+    function setDetails(deets) { detailsWrapper.textContent = deets; }
+  </script>
+</body>
+</html>

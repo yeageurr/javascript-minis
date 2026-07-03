@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Input field with Live Preview - onchange</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+    * { margin: 0;padding: 0;box-sizing: border-box; }
+    body { width: 100vw;height: 100vh;font-size: 16px;font-family: 'Poppins', serif; }
+    .wrapper { width: 100%;height: 100%;display: flex;padding: 1em;display: flex;align-items: center;justify-content: center; }
+    .container { border: 1px solid rgba(0, 0, 0, .3);padding: 1em;border-radius: .3em;display: flex;flex-direction: column;align-items: center;justify-content: center;background-color: #ebebeb; }
+    .container > .head { text-align: center;display: flex;flex-direction: column;align-items: center;justify-content: center;gap: 0.1em;width: 100%;margin: .5em 0 1.5em 0; }
+    .head > .title { font-size: 1.9em;font-family: 'Roboto', serif;font-weight: 550; }
+    .head > .name { font-size: .8em; }
+    .container > .input-output { display: flex;flex-direction: column;align-items: center;justify-content: center;gap: 0.5em;width: 100%; }
+    .input-output > input, .input-output > textarea { padding: 0.5em;font-family: 'Poppins', serif;font-size: 1em;outline: none;border-radius: 0.5em;border: 1px solid rgba(0, 0, 0, .5);width: 100%; }
+    .input-output > textarea { resize: none; }
+    .input-output > .limit { font-size: 0.8em;width: 100%;text-align: right;padding: 0 0.5em; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container">
+      <div class="head">
+        <p class="title">Basic onchange Activity</p>
+        <p class="name">Anthony Domasig — BSIT 3B</p>
+      </div>
+      <div class="input-output">
+        <input type="text" name="input" id="input" placeholder="Enter something..." autocomplete="off" oninput="livePreview(this.value)" />
+        <textarea name="output" id="output" readonly></textarea>
+        <p class="limit" id="limit">0/100</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const log = console.log;
+    const preview = document.getElementById('output');
+    const limit = document.getElementById('limit');
+    let count = 0;
+
+    function livePreview(val) {
+      // val.length > 100 ? preview.style.border = "1px solid rgb(232, 0, 0, .5)" : preview.style.border = "1px solid rgba(0, 0, 0, .5)"; preview.textContent = val; limit.textContent = `${val.length}/100`;
+      if(val.length > 100) { preview.style.border = "1px solid rgb(232, 0, 0, .5)" } 
+      else { preview.style.border = "1px solid rgba(0, 0, 0, .5)"; preview.textContent = val; limit.textContent = `${val.length}/100`; }
+    }
+  </script>
+</body>
+</html>
