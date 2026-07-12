@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <title>Simple Email Form with Validation — onsubmit</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+    :root { --errorBG: rgb(255, 191, 191);--successBG: rgb(153, 255, 149);--borderRadius: .5em; }
+    * { box-sizing: p0;margin: 0; } 
+    body { width: 100vw;height: 100vh;font-size: 20px;box-sizing: border-box;font-family: 'Poppins', serif; }
+    .container { width: 100%;height: 100%;display: flex;flex-direction: column;align-items: center;justify-content: center;position: relative; }
+    .container > .alertBox { position: absolute;top: 0;box-shadow: 0 0 1em 0 rgba(0, 0, 0, .2);display: flex;align-items: center;justify-content: center;gap: 0.4em;padding: .6em;border-radius: var(--borderRadius);font-size: 0.8em; }
+    .form-wrapper { border: 1px solid #000;padding: 1em;border-radius: var(--borderRadius); }
+    .form-wrapper > .heading { font-size: 1.3em;text-align: center; }
+    .form-wrapper > form { display: flex;flex-direction: column;width: 100%;gap: 0.5em;margin-top: 1em;box-sizing: border-box; }
+    form > .input-wrapper { display: flex;gap: 0.8em; }
+    .input-wrapper > label { width: 4.5em;font-size: 0.8em; }
+    .input-wrapper > input { border: none;border-bottom: 1px solid rgba(0, 0, 0, .4);outline: none;padding: .2em 0.8em;font-family: 'Poppins', serif; }
+    form > .body-submit { display: flex;flex-direction: column;margin-top: 0.5em;gap: .5em; }
+    .body-submit > textarea { resize: none;outline: none;font-family: 'Poppins', serif;padding: 0.5em;height: 5em; }
+    .body-submit > button { padding: 0.5em;font-family: 'Roboto', serif;font-size: .9em;background-color: #0400fc;border: none;border-radius: .2em;color: #fff;display: flex;align-items: center;cursor: pointer;justify-content: center;gap: 0.5em; &:hover {background-color: #2b28ff;} }
+    
+  </style>
+</head>
+<body>
+  
+  <div class="container">
+    <div class="alertBox" id="alertBox">
+      <i class='bx bx-error'></i>
+      <p class="alertMessage" id="alertMessage"></p>
+    </div>
+    <div class="form-wrapper">
+      <p class="heading">Send us an E-mail</p>
+      <form class="formBox" onsubmit="submitEmail(event)">
+        <div class="input-wrapper">
+          <label for="name">Name:</label>
+          <input type="text" name="name" id="name" class="name" autocomplete="off" />
+        </div>
+        <div class="input-wrapper">
+          <label for="email" class="email">Email:</label>
+          <input type="email" name="email" id="email" class="email" autocomplete="off" />
+        </div>
+        <div class="body-submit">
+          <textarea name="message" id="message" class="message" autocomplete="off"></textarea>
+          <hr>
+          <button type="submit" class="submit" id="submit">
+            <i class='bx bx-send'></i> Send
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const log = console.log;
+    const name_field = document.getElementById('name');
+    const email_field = document.getElementById('email');
+    const message_field = document.getElementById('message');
+    const alertBox = document.getElementById('alertBox');
+    const alertMessage = document.getElementById('alertMessage');
+    const dig = /\d/, specialChars = /[^A-Za-z0-9\s]/
+
+    function submitEmail(e) {
+      e.preventDefault();
+
+      // Name Validation
+      if(!name_field.value) {
+        alertBox.style.backgroundColor = "var(--errorBG)";
+        alertMessage.textContent = "Name cannot be empty!";
+        return;
+      }
+      else if (dig.test(name_field.value) || specialChars.test(name_field.value)) {
+        alertBox.style.backgroundColor = "var(--errorBG)";
+        alertMessage.textContent = "Name cannot contain digits or special characters.";
+        return;
+      }
+      
+      // Email Validation
+      else if (!email_field.value) {
+        alertBox.style.backgroundColor = "var(--errorBG)";
+        alertMessage.textContent = "Email cannot be empty.";
+        return;
+      }
+      else if (!email_field.value.includes("@") || email_field.value.includes("@spam.com")) {
+        alertBox.style.backgroundColor = "var(--errorBG)";
+        alertMessage.textContent = "Invalid email!";
+        return;
+      }
+      
+      // Message Validation
+      else if (!message_field.value) {
+        alertBox.style.backgroundColor = "var(--errorBG)";
+        alertMessage.textContent = "Message cannot be empty.";
+        return;
+      }
+
+      alertBox.style.backgroundColor = "var(--successBG)";
+      alertMessage.textContent = "Email sent!";
+      name_field.value = "";
+      email_field.value = "";
+      message_field.value = "";
+      return;
+    }
+
+  </script>
+</body>
+</html>
